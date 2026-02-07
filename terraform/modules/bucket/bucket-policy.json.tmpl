@@ -1,0 +1,34 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EnforceHTTPSConnections",
+      "Effect": "Deny",
+      "Action": "s3:*",
+      "Resource": "${bucket_arn}/*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyAnonymousAccess",
+      "Effect": "Deny",
+      "Action": "s3:*",
+      "Resource": "${bucket_arn}/*",
+      "Condition": {
+        "Null": {
+          "aws:PrincipalArn": "true"
+        }
+      }
+    },
+    {
+      "Sid": "PreventBucketDeletion",
+      "Effect": "Deny",
+      "Action": "s3:DeleteBucket",
+      "Resource": "${bucket_arn}",
+      "Principal": "*"
+    }
+  ]
+}

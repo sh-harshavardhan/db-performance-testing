@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+tasks:
+  default:
+    desc: Print a greeting message
+    cmds:
+      - echo "Hello, world!"
+    silent: true
+
+  hooks.install:
+    desc: Install pre-commit hooks
+    cmds:
+      - echo "Installing pre-commit hooks"
+      - pre-commit install
+
+  hooks.run:
+    desc: Run pre-commit hooks
+    cmds:
+      - echo "Running pre-commit hooks"
+      - pre-commit run --all-files
+
+  hooks.update:
+    desc: Update pre-commit hooks
+    cmds:
+      - echo "Updating pre-commit hooks"
+      - pre-commit autoupdate --freeze
