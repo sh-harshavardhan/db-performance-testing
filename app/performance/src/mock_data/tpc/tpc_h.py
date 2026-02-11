@@ -17,20 +17,21 @@ def create_tpc_h_tables(input_args):
             [
                 "INSTALL tpch;",
                 "LOAD tpch;",
-                f"""CALL dbgen(sf ={kwargs.get("scale_factor")} , children = {kwargs.get("scale_factor")}, step = {run}, suffix = '_{run}' );""",
+                f"""CALL dbgen(
+                    sf ={kwargs.get("scale_factor")},
+                    children = {kwargs.get("scale_factor")},
+                    step = {run}, suffix = '_{run}' );
+                """,
             ]
         )
         tables = duckdb.conn.execute("show tables;").fetchall()
-
         for table in tables:
-            if kwargs.get("export_type") == "parquet":
-                duckdb.conn.execute(
-                    f"""COPY {table}_{run} TO '{kwargs.get("export_type")}/{table}/part_{run}.parquet' (FORMAT PARQUET);"""
-                )
-            elif kwargs.get("export_type") == "csv":
-                duckdb.conn.execute(
-                    f"""COPY {table}_{run} TO '{kwargs.get("export_type")}/{table}/part_{run}.csv' (FORMAT CSV, HEADER);"""
-                )
+            duckdb.export_table(
+                table,
+                export_type=kwargs.get("export_type"),
+                target_path=f"{kwargs.get('export_type')}/{table}",
+                file_prefix=f"part_{run}",
+            )
 
 
 def main(**kwargs) -> None:

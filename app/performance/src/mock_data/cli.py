@@ -59,12 +59,19 @@ def tpc_h(
 @timer
 @app.command(help="Create sample TPC-DS data")
 def tpc_ds(
-    scale_factor: Literal[1, 10, 100, 1000] = typer.Option(1, help="Scale factor for TPC-DS data generation"),
+    scale_factor: Literal[1, 10, 100, 999] = typer.Option(1, help="Scale factor for TPC-DS data generation"),
     export_type: Literal["parquet", "csv"] = typer.Option("csv", help="Export format for the generated data"),
     target_path: str = typer.Option("tpc_ds_data", help="Path where the data has to be exported"),
     sql_path: str = typer.Option("sqls/tcp_ds", help="Path where the TPC-DS queries will be exported"),
+    file_size: int = typer.Option(128, help="Each file size in MB"),
 ) -> None:
     """Command to generate TPC-H data using DuckDB's TPC-DS extension"""
     from performance.src.mock_data.tpc.tpc_ds import main
 
-    main(scale_factor=scale_factor, export_type=export_type, sql_path=sql_path, target_path=target_path)
+    main(
+        scale_factor=scale_factor,
+        export_type=export_type,
+        sql_path=sql_path,
+        target_path=target_path,
+        file_size=file_size,
+    )

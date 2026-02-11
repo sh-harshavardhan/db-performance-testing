@@ -28,9 +28,14 @@ def timer(func):
 
     def wrapper(*args, **kwargs):
         start_time = time.time()
+        print(
+            f"Executing {func.__name__}... "
+            f"started at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))}",
+            flush=True,
+        )
         result = func(*args, **kwargs)
         end_time = time.time()
-        print(f"Execution time for {func.__name__}: {end_time - start_time:.4f} seconds", flush=True)
+        print(f"Execution time for {func.__name__}: {end_time - start_time: .4f} seconds", flush=True)
         return result
 
     return wrapper
